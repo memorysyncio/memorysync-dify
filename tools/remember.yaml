@@ -1,0 +1,47 @@
+identity:
+  name: remember
+  author: memorysync
+  label:
+    en_US: Remember
+description:
+  human:
+    en_US: Store a fact or conversation turn in the user's long-term memory. Drop this node after your LLM node to persist what happened.
+  llm: Save a fact or statement to the user's long-term memory so it can be recalled in future conversations. Use when the user shares preferences, facts about themselves, or decisions worth remembering.
+parameters:
+  - name: content
+    type: string
+    required: true
+    form: llm
+    label:
+      en_US: Content
+    human_description:
+      en_US: The text to remember (a user message, a fact, a decision).
+    llm_description: The exact text to remember for this user.
+  - name: role
+    type: select
+    required: false
+    default: user
+    form: form
+    label:
+      en_US: Speaker role
+    human_description:
+      en_US: Who said it — the user or the assistant.
+    options:
+      - value: user
+        label:
+          en_US: user
+      - value: assistant
+        label:
+          en_US: assistant
+  - name: user_id
+    type: string
+    required: false
+    form: llm
+    label:
+      en_US: User ID (optional)
+    human_description:
+      en_US: Leave empty — the end-user id is detected from Dify automatically.
+    llm_description: Optional override for the user this memory belongs to. Leave empty to use the current end user.
+extra:
+  python:
+    source: tools/remember.py
