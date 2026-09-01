@@ -1,0 +1,26 @@
+version: 1.0.0
+type: plugin
+author: memorysync
+name: memorysync
+label:
+  en_US: MemorySync
+description:
+  en_US: Long-term user memory for Dify apps — recall relevant context before LLM calls, remember new facts, search memories, and manage them across conversations, apps, and every other MemorySync surface.
+icon: icon.svg
+resource:
+  memory: 268435456
+  permission: {}
+plugins:
+  tools:
+    - provider/memorysync.yaml
+meta:
+  version: 1.0.0
+  arch:
+    - amd64
+    - arm64
+  runner:
+    language: python
+    version: "3.12"
+    entrypoint: main
+created_at: 2026-08-24T00:00:00Z
+privacy: PRIVACY.md
