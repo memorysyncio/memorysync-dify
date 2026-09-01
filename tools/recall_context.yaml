@@ -1,0 +1,40 @@
+identity:
+  name: recall_context
+  author: memorysync
+  label:
+    en_US: Recall Context
+description:
+  human:
+    en_US: Retrieve a prompt-ready block of the user's relevant long-term memories. Drop this node before your LLM node and wire its text output into the prompt.
+  llm: Retrieve the user's relevant long-term memories as a ready-to-use context block. Use before answering anything that could depend on what the user said in past conversations (preferences, facts, prior decisions).
+parameters:
+  - name: query
+    type: string
+    required: true
+    form: llm
+    label:
+      en_US: Query
+    human_description:
+      en_US: What to recall memories about (usually the user's current question).
+    llm_description: The question or topic to recall the user's memories about.
+  - name: user_id
+    type: string
+    required: false
+    form: llm
+    label:
+      en_US: User ID (optional)
+    human_description:
+      en_US: Leave empty — the end-user id is detected from Dify automatically.
+    llm_description: Optional override for the user whose memories to recall. Leave empty to use the current end user.
+  - name: top_k
+    type: number
+    required: false
+    default: 5
+    form: form
+    label:
+      en_US: Memories to recall
+    human_description:
+      en_US: Maximum memories considered (1-25).
+extra:
+  python:
+    source: tools/recall_context.py
