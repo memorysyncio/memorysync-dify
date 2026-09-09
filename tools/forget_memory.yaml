@@ -1,0 +1,31 @@
+identity:
+  name: forget_memory
+  author: memorysync
+  label:
+    en_US: Forget Memory
+description:
+  human:
+    en_US: Delete ONE specific memory by id (find ids with Search Memories). There is deliberately no delete-everything tool.
+  llm: Delete exactly one memory by its numeric id when the user explicitly asks to forget something specific. Find the id with search_memories first.
+parameters:
+  - name: memory_id
+    type: string
+    required: true
+    form: llm
+    label:
+      en_US: Memory ID
+    human_description:
+      en_US: The numeric id of the memory to delete (from Search Memories).
+    llm_description: The numeric id of the single memory to delete.
+  - name: user_id
+    type: string
+    required: false
+    form: llm
+    label:
+      en_US: User ID (optional)
+    human_description:
+      en_US: Leave empty — the end-user id is detected from Dify automatically.
+    llm_description: Optional override for the user the memory belongs to. Leave empty to use the current end user.
+extra:
+  python:
+    source: tools/forget_memory.py
