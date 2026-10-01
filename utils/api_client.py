@@ -12,14 +12,16 @@ from urllib.parse import quote
 
 import httpx
 
-PLUGIN_VERSION = "1.0.0"
+#: The plugin version — keep equal to ``version`` in manifest.yaml (a test
+#: checks it). It is sent in the User-Agent.
+PLUGIN_VERSION = "1.1.0"
 DEFAULT_BASE_URL = "https://api.memorysync.io"
 _USER_AGENT = f"dify-memorysync/{PLUGIN_VERSION}"
 
 #: Namespace used when the key cannot list projects.
 FALLBACK_TENANT = "default"
 
-#: One turn beyond this length is truncated before storage.
+#: One turn beyond this length is truncated before it is sent.
 MAX_TURN_CHARS = 16000
 
 #: Hard per-request budget for tool calls.
@@ -41,7 +43,8 @@ def resolve_base_url(base_url: Optional[str]) -> str:
 
 def fnv1a64(value: str) -> str:
     """FNV-1a 64-bit over UTF-16 code units — matches every other
-    MemorySync adapter, so identical turns converge on one stored row."""
+    MemorySync adapter. It makes the speaker seed deterministic, so the
+    server recognises a re-sent turn and extracts it only once."""
     prime = 0x100000001B3
     mask = 0xFFFFFFFFFFFFFFFF
     h = 0xCBF29CE484222325
@@ -157,7 +160,17 @@ class MemorySyncClient:
         text: str,
         speaker: str,
         metadata: Optional[Dict[str, Any]] = None,
+        role: Optional[str] = None,
     ) -> Dict[str, Any]:
+        """Send one turn to fact extraction.
+
+        The server extracts durable facts from USER turns only; the text
+        itself is not stored, and assistant turns store nothing. The
+        response carries ``processing_status`` (``distilling``,
+        ``skipped_non_user_turn``, ``skipped_low_value``, ``skipped_replay``,
+        ``skipped`` when over quota) and ``already_exists`` for a turn that
+        was already sent; ``memory_id`` is always null.
+        """
         body: Dict[str, Any] = {
             "tenant_id": self.resolve_tenant_id(),
             "user_id": user_id,
@@ -166,6 +179,8 @@ class MemorySyncClient:
             "speaker": speaker,
             "sync_embed": False,
         }
+        if role is not None:
+            body["role"] = role
         if metadata is not None:
             body["metadata"] = metadata
         return self._request("POST", "/v1/memory/add_turn", json=body) or {}

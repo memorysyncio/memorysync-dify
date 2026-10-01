@@ -5,8 +5,8 @@ identity:
     en_US: Remember
 description:
   human:
-    en_US: Store a fact or conversation turn in the user's long-term memory. Drop this node after your LLM node to persist what happened.
-  llm: Save a fact or statement to the user's long-term memory so it can be recalled in future conversations. Use when the user shares preferences, facts about themselves, or decisions worth remembering.
+    en_US: Send the user's message (or a fact about the user) to MemorySync. The durable facts in it — preferences, personal details, decisions — are extracted and remembered across conversations; the text itself is not stored, and assistant messages are not stored as memories. Drop this node after your LLM node and pass the user's message.
+  llm: Save what the user said to their long-term memory. MemorySync extracts the durable facts in it (preferences, facts about themselves, decisions) so they can be recalled in future conversations. Use when the user shares something worth remembering, and pass the user's own words.
 parameters:
   - name: content
     type: string
@@ -15,8 +15,8 @@ parameters:
     label:
       en_US: Content
     human_description:
-      en_US: The text to remember (a user message, a fact, a decision).
-    llm_description: The exact text to remember for this user.
+      en_US: The user's message or a fact about the user. Durable facts are extracted from it; the text itself is not stored.
+    llm_description: What the user said, in their own words, or a fact about the user. Durable facts are extracted from it.
   - name: role
     type: select
     required: false
@@ -25,7 +25,7 @@ parameters:
     label:
       en_US: Speaker role
     human_description:
-      en_US: Who said it — the user or the assistant.
+      en_US: Who said it. User messages are sent to fact extraction; assistant messages are not stored as memories and are not counted.
     options:
       - value: user
         label:

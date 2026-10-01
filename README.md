@@ -36,7 +36,7 @@ Claude Code, and more).
 | Tool | What it does |
 | --- | --- |
 | **Recall Context** | Returns a prompt-ready block of the user's relevant memories for a query — wire it into any LLM node's context. |
-| **Remember** | Stores a fact or conversation turn. Deterministic idempotency: node re-runs and retries converge on one stored row. |
+| **Remember** | Sends the user's message (or a fact about the user) to fact extraction; only the durable facts in it are stored as memories, each with its own id. Node re-runs and retries of the same message are recognised and not processed twice. Assistant messages are not stored as memories. |
 | **Search Memories** | Scored JSON list of matching memories (capped at 25), each with a usable numeric id. |
 | **Forget Memory** | Deletes exactly ONE memory by numeric id, loudly. There is deliberately no delete-everything tool. |
 
@@ -46,8 +46,16 @@ A typical chatflow wires two tools:
 
 1. **Recall Context** runs before your LLM node — pass the user's message as
    `query` and inject the returned `context` into the LLM's system prompt.
-2. **Remember** runs after the reply — store the user's message (and
-   optionally the assistant's) so future conversations recall it.
+2. **Remember** runs after the reply — pass the user's message as `content`.
+   MemorySync extracts the durable facts in it so future conversations
+   recall them. Assistant replies are not stored as memories, so there is no
+   need to remember them.
+
+Remember reports what happened in its JSON output: `status` is `accepted`
+(sent to fact extraction, `stored_as: "facts"`), `skipped` (nothing saved —
+`processing_status` says why: an assistant message, a message with nothing
+worth remembering, or the monthly quota; `already_exists: true` when the same
+message was already sent) or `error`.
 
 User identity resolves automatically from Dify's runtime user, so each of
 your end users gets their own private memory space; an optional `user_id`
