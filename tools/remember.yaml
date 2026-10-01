@@ -25,7 +25,7 @@ parameters:
     label:
       en_US: Speaker role
     human_description:
-      en_US: Who said it. User messages are sent to fact extraction; assistant messages are not stored as memories and are not counted.
+      en_US: Who said it. User messages are sent to fact extraction; assistant messages are not stored as memories but still count one add.
     options:
       - value: user
         label:
