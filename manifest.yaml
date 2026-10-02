@@ -8,7 +8,7 @@ label:
   en_US: MemorySync
 description:
   en_US: Long-term user memory for Dify apps — recall relevant context before LLM calls, remember new facts, search memories, and manage them across conversations, apps, and every other MemorySync surface.
-icon: icon.svg
+icon: icon.png
 resource:
   memory: 268435456
   permission: {}

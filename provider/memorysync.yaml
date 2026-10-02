@@ -5,7 +5,7 @@ identity:
     en_US: MemorySync
   description:
     en_US: Long-term user memory — recall context, remember facts, search and manage memories across conversations and apps.
-  icon: icon.svg
+  icon: icon.png
 credentials_for_provider:
   api_key:
     type: secret-input

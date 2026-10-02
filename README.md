@@ -26,10 +26,11 @@ Claude Code, and more).
 1. Install the plugin from the Dify Marketplace (or import the `.difypkg`).
 2. In [app.memorysync.io](https://app.memorysync.io) go to
    **Settings → API Keys** and create a key inside a project.
-3. In Dify, open **Plugins → MemorySync → Authorize** and paste the key
-   (`ms_...`). Leave **Base URL** empty for the MemorySync cloud — it exists
-   only for staging environments. Credentials are validated against the live
-   API on save.
+3. In Dify, open **Integrations → Tool Plugin → MemorySync** (**Plugins** in
+   older Dify versions) and add your key (`ms_...`) under **Authorization**.
+   Leave **Base URL** empty for the MemorySync cloud — it exists only for
+   staging environments. Credentials are validated against the live API on
+   save.
 
 ## Tools
 
